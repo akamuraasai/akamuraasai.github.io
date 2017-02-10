@@ -23,6 +23,11 @@
     <script type="text/javascript">
         var app = angular.module('mainApp', []);
         app.controller('mainCtrl', fnController);
+        app.use(function(req, res, next) {
+            res.header("Access-Control-Allow-Origin", "*");
+            res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With,     Content-Type, Accept");
+            next();
+        });
 
         function fnController($scope, $http) {
             $scope.teste = 'heuhue';
