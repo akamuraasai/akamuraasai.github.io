@@ -23,11 +23,6 @@
     <script type="text/javascript">
         var app = angular.module('mainApp', []);
         app.controller('mainCtrl', fnController);
-        app.use(function(req, res, next) {
-            res.header("Access-Control-Allow-Origin", "*");
-            res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With,     Content-Type, Accept");
-            next();
-        });
 
         function fnController($scope, $http) {
             $scope.teste = 'heuhue';
@@ -35,25 +30,28 @@
             $scope.envia = enviaCodigo;
 
             function enviaCodigo() {
-                var req = {
-                    url: 'https://api.hackerrank.com/checker/submission.json',
-                    method: 'JSONP',
-                    data: {
-                        source: $scope.codigo,
-                        lang: 20,
-                        testcases: ['hue'],
-                        api_key: 'hackerrank|665905-1221|d2773ca40a490d766a3910926e0a4c0488eed803',
-                        wait: true,
-                        format: 'json'
-                    }
-                };
-                $http(req)
-                        .then(function (data) {
-                            console.log(data);
+                var data = new FormData();
+                data.append("source", "process.stdin.resume(); process.stdin.setEncoding('ascii');  var input_stdin = \"\"; var input_stdin_array = \"\"; var input_currentline = 0;  process.stdin.on('data', function (data) {     input_stdin += data; });  process.stdin.on('end', function () {     input_stdin_array = input_stdin.split(\"\\n\");     main();     });  function readLine() {     return input_stdin_array[input_currentline++]; }  function main() {     var n = parseInt(readLine());     arr = readLine().split(' ');     arr = arr.map(Number); var soma = 0; arr.forEach(function(item){ soma += item; }); console.log(soma); }");
+                data.append("lang", "20");
+                data.append("testcases", "[\"6\\n1 2 3 4 10 11\"]");
+                data.append("api_key", "hackerrank|665905-1221|d2773ca40a490d766a3910926e0a4c0488eed803");
+                data.append("wait", "true");
+                data.append("format", "json");
 
-                        }, function (data) {
-                            console.error(data);
-                        });
+                var xhr = new XMLHttpRequest();
+                xhr.withCredentials = true;
+
+                xhr.addEventListener("readystatechange", function () {
+                  if (this.readyState === 4) {
+                    console.log(this.responseText);
+                  }
+                });
+
+                xhr.open("POST", "https://api.hackerrank.com/checker/submission.json");
+                xhr.setRequestHeader("cache-control", "no-cache");
+                xhr.setRequestHeader("postman-token", "c0d30493-b03d-a180-12ef-4f42873600c0");
+
+                xhr.send(data);
             }
         }
     </script>
