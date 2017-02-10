@@ -37,7 +37,7 @@
             function enviaCodigo() {
                 var req = {
                     url: 'https://api.hackerrank.com/checker/submission.json',
-                    method: 'POST',
+                    method: 'JSONP',
                     data: {
                         source: $scope.codigo,
                         lang: 20,
